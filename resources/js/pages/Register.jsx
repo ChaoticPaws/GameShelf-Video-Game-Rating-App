@@ -66,23 +66,23 @@ export const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-lightBg dark:bg-darkBg">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-lightBg dark:bg-cyber-dark">
             <div className="w-full max-w-md">
                 {/* Form Container */}
-                <div className="bg-white dark:bg-header rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-cyber-purple/20">
                     {/* Header */}
-                    <div className="bg-heading dark:bg-accent-dark p-6 text-center">
+                    <div className="bg-heading dark:bg-gradient-to-r dark:from-cyber-purple/80 dark:to-cyber-pink/80 p-6 text-center">
                         <h2 className="text-3xl font-bold text-white drop-shadow-md">
                             Create Account
                         </h2>
-                        <p className="text-pink-100 dark:text-accent-light mt-1">
+                        <p className="text-pink-100 dark:text-cyan-200 mt-1">
                             Join our community
                         </p>
                     </div>
 
                     <div className="p-8">
                         {errors.general && (
-                            <div className="mb-6 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-4 rounded-xl border-l-4 border-red-500 dark:border-red-400 animate-pulse">
+                            <div className="mb-6 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-200 p-4 rounded-xl border-l-4 border-red-500 dark:border-red-400">
                                 <span className="font-bold">⚠️ Error:</span>{" "}
                                 {errors.general}
                             </div>
@@ -92,7 +92,7 @@ export const Register = () => {
                             <div>
                                 <label
                                     htmlFor="name"
-                                    className="block text-sm font-medium text-textLight dark:text-textDark mb-2"
+                                    className="block text-sm font-medium text-textLight dark:text-cyan-100 mb-2"
                                 >
                                     Username
                                 </label>
@@ -101,8 +101,8 @@ export const Register = () => {
                                     className={`w-full px-4 py-3 rounded-xl border-2 ${
                                         errors.name
                                             ? "border-red-300 dark:border-red-400"
-                                            : "border-gray-200 dark:border-gray-600"
-                                    } focus:border-heading dark:focus:border-accent focus:ring-2 focus:ring-pink-200 dark:focus:ring-accent-light bg-white dark:bg-gray-700 text-textLight dark:text-textDark placeholder-gray-400 dark:placeholder-gray-400 transition-all shadow-inner`}
+                                            : "border-gray-200 dark:border-cyber-purple/30"
+                                    } focus:border-heading dark:focus:border-cyber-cyan focus:ring-2 focus:ring-pink-200 dark:focus:ring-cyber-cyan/20 bg-white dark:bg-gray-700/80 text-textLight dark:text-gray-200 placeholder-gray-400 dark:placeholder-cyan-100/50 transition-all shadow-inner`}
                                     id="name"
                                     name="name"
                                     value={formData.name}
@@ -119,7 +119,7 @@ export const Register = () => {
                             <div>
                                 <label
                                     htmlFor="email"
-                                    className="block text-sm font-medium text-textLight dark:text-textDark mb-2"
+                                    className="block text-sm font-medium text-textLight dark:text-cyan-100 mb-2"
                                 >
                                     Email Address
                                 </label>
@@ -128,8 +128,8 @@ export const Register = () => {
                                     className={`w-full px-4 py-3 rounded-xl border-2 ${
                                         errors.email
                                             ? "border-red-300 dark:border-red-400"
-                                            : "border-gray-200 dark:border-gray-600"
-                                    } focus:border-heading dark:focus:border-accent focus:ring-2 focus:ring-pink-200 dark:focus:ring-accent-light bg-white dark:bg-gray-700 text-textLight dark:text-textDark placeholder-gray-400 dark:placeholder-gray-400 transition-all shadow-inner`}
+                                            : "border-gray-200 dark:border-cyber-purple/30"
+                                    } focus:border-heading dark:focus:border-cyber-cyan focus:ring-2 focus:ring-pink-200 dark:focus:ring-cyber-cyan/20 bg-white dark:bg-gray-700/80 text-textLight dark:text-gray-200 placeholder-gray-400 dark:placeholder-cyan-100/50 transition-all shadow-inner`}
                                     id="email"
                                     name="email"
                                     value={formData.email}
@@ -146,7 +146,7 @@ export const Register = () => {
                             <div>
                                 <label
                                     htmlFor="password"
-                                    className="block text-sm font-medium text-textLight dark:text-textDark mb-2"
+                                    className="block text-sm font-medium text-textLight dark:text-cyan-100 mb-2"
                                 >
                                     Password
                                 </label>
@@ -155,8 +155,8 @@ export const Register = () => {
                                     className={`w-full px-4 py-3 rounded-xl border-2 ${
                                         errors.password
                                             ? "border-red-300 dark:border-red-400"
-                                            : "border-gray-200 dark:border-gray-600"
-                                    } focus:border-heading dark:focus:border-accent focus:ring-2 focus:ring-pink-200 dark:focus:ring-accent-light bg-white dark:bg-gray-700 text-textLight dark:text-textDark placeholder-gray-400 dark:placeholder-gray-400 transition-all shadow-inner`}
+                                            : "border-gray-200 dark:border-cyber-purple/30"
+                                    } focus:border-heading dark:focus:border-cyber-cyan focus:ring-2 focus:ring-pink-200 dark:focus:ring-cyber-cyan/20 bg-white dark:bg-gray-700/80 text-textLight dark:text-gray-200 placeholder-gray-400 dark:placeholder-cyan-100/50 transition-all shadow-inner`}
                                     id="password"
                                     name="password"
                                     value={formData.password}
@@ -173,7 +173,7 @@ export const Register = () => {
                             <div>
                                 <label
                                     htmlFor="password_confirmation"
-                                    className="block text-sm font-medium text-textLight dark:text-textDark mb-2"
+                                    className="block text-sm font-medium text-textLight dark:text-cyan-100 mb-2"
                                 >
                                     Confirm Password
                                 </label>
@@ -182,8 +182,8 @@ export const Register = () => {
                                     className={`w-full px-4 py-3 rounded-xl border-2 ${
                                         errors.password_confirmation
                                             ? "border-red-300 dark:border-red-400"
-                                            : "border-gray-200 dark:border-gray-600"
-                                    } focus:border-heading dark:focus:border-accent focus:ring-2 focus:ring-pink-200 dark:focus:ring-accent-light bg-white dark:bg-gray-700 text-textLight dark:text-textDark placeholder-gray-400 dark:placeholder-gray-400 transition-all shadow-inner`}
+                                            : "border-gray-200 dark:border-cyber-purple/30"
+                                    } focus:border-heading dark:focus:border-cyber-cyan focus:ring-2 focus:ring-pink-200 dark:focus:ring-cyber-cyan/20 bg-white dark:bg-gray-700/80 text-textLight dark:text-gray-200 placeholder-gray-400 dark:placeholder-cyan-100/50 transition-all shadow-inner`}
                                     id="password_confirmation"
                                     name="password_confirmation"
                                     value={formData.password_confirmation}
@@ -200,7 +200,7 @@ export const Register = () => {
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full bg-heading dark:bg-accent hover:bg-[#E00050] dark:hover:bg-accent-dark text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center mt-2"
+                                className="w-full bg-heading dark:bg-gradient-to-r dark:from-cyber-purple/90 dark:to-cyber-pink/90 hover:bg-[#E00050] dark:hover:from-cyber-purple dark:hover:to-cyber-pink text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center mt-2"
                             >
                                 {submitting ? (
                                     <>
@@ -235,14 +235,14 @@ export const Register = () => {
                         </form>
 
                         <div className="mt-6 text-center">
-                            <p className="text-textLight dark:text-textDark text-sm">
+                            <p className="text-textLight dark:text-cyan-100 text-sm">
                                 Already have an account?{" "}
                                 <a
-                                    href="/login"
-                                    className="text-heading dark:text-accent hover:text-[#E00050] dark:hover:text-accent-dark font-medium underline"
-                                >
-                                    Sign in
-                                </a>
+    href="/login"
+    className="text-heading dark:text-cyan-300 hover:text-[#E00050] dark:hover:text-cyber-green font-medium underline"
+>
+    Sign in
+</a>
                             </p>
                         </div>
                     </div>

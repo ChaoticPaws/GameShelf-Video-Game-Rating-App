@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useTheme } from "./contexts/ThemeContext";
 
 // Layouts
 import { MainLayout } from "./layouts/MainLayout";
@@ -18,13 +16,6 @@ import { Games } from "./pages/Games";
 import { GameListDetail } from "./pages/GameListDetail";
 
 export function MainApp() {
-    const { theme } = useTheme();
-
-    // Apply theme class to body
-    useEffect(() => {
-        document.body.className = theme;
-    }, [theme]);
-
     return (
         <Routes>
             <Route path="/" element={<MainLayout />}>

@@ -23,4 +23,15 @@ class RawgApiService
 
         return $response->json();
     }
+   public function getGameScreenshots($rawgId)
+    {
+        $response = Http::get("https://api.rawg.io/api/games/{$rawgId}/screenshots", [
+            'key' => env('RAWG_API_KEY'),
+        ]);
+
+        if ($response->successful()) {
+            return $response->json(); // Devuelve array con 'results'
+        }
+        return ['results' => []];
+    }
 }

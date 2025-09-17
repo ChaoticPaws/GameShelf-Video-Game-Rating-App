@@ -56,3 +56,4 @@ class VideoGame extends Model
         return $this->belongsToMany(Platform::class, 'game_platform', 'video_game_id', 'platform_id');
     }
 }
+

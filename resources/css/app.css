@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   font-family: "Rubik", sans-serif;
 }
+
 :root {
   --primary: #6366f1;
   --primary-dark: #4f46e5;
@@ -14,7 +15,7 @@
 }
 
 .dark {
-  --background: #111827;
+  --background: #11271b;
   --foreground: #f9fafb;
 }
 
@@ -43,3 +44,393 @@ body {
   --tw-ring-color: var(--primary);
 }
 
+/* ANIMACIONES BÁSICAS*/
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 89, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 89, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 89, 0);
+  }
+}
+
+@keyframes pulse-glow-dark {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 139, 146, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 139, 146, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 139, 146, 0);
+  }
+}
+
+/*BLACK HOLES (Portales) OVALADOS*/
+.blackhole-portal-left,
+.blackhole-portal-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scaley(1.7); 
+  width: 200px;
+  height: 200px;
+  z-index: 15;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: none !important;
+}
+
+.blackhole-portal-left {
+  left: -5%;
+}
+
+.blackhole-portal-right {
+  right: -6%;
+}
+
+/*TARJETAS*/
+.dark .card-warp {
+  background-color: rgba(25, 25, 35, 0.85) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px); 
+}
+
+/* Asegurar que el contenido de la tarjeta sea completamente visible */
+.dark .review-card {
+  background-color: transparent !important;
+}
+
+.dark .review-card > div {
+  background-color: transparent !important;
+}
+
+/* Mejorar contraste para texto */
+.dark .text-heading,
+.dark .review-card h3,
+.dark .review-card h4,
+.dark .review-card .text-gray-700,
+.dark .review-card .text-gray-800 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.dark .review-card .text-gray-600,
+.dark .review-card .text-textLight {
+  color: #d0d0d0 !important;
+}
+
+/* Mejorar visibilidad de elementos de interfaz */
+.dark .review-card .bg-gray-100 {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .review-card .border-gray-200 {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Asegurar que las estrellas de rating sean visibles */
+.dark .review-card .text-yellow-500 {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 3px rgba(251, 191, 36, 0.5);
+}
+
+/* EFECTO DE VELOCIDAD */
+.speed-lines {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 200px; 
+  z-index: 45; 
+  pointer-events: none;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+  overflow: visible;
+}
+
+.speed-lines.active {
+  opacity: 0.9;
+}
+
+.speed-lines.paused { 
+  opacity: 0.2; 
+}
+
+.speed-lines.left { 
+  left: -5%;
+}
+
+.speed-lines.right { 
+  right: -5%;
+}
+
+/* Líneas de velocidad - más largas para llenar el portal */
+.speed-line {
+  height: 2px;
+  width: 160px; 
+  opacity: 0;
+  position: relative;
+  transform-origin: center;
+}
+
+/* Efecto azul para el agujero negro izquierdo - fluye HACIA la izquierda */
+.speed-lines.left .speed-line {
+  background: linear-gradient(90deg, transparent 0%, #4fc3f7 15%, #0288d1 40%, #4fc3f7 70%, transparent 100%) !important;
+  box-shadow: 0 0 8px rgba(79, 195, 247, 0.8) !important;
+  animation: speedLineConstantLeft 1.8s infinite linear;
+}
+
+/* Efecto naranja para el agujero negro derecho - fluye HACIA la IZQUIERDA */
+.speed-lines.right .speed-line {
+  background: linear-gradient(90deg, transparent 0%, #ffb74d 15%, #f57c00 40%, #ffb74d 70%, transparent 100%) !important;
+  box-shadow: 0 0 8px rgba(255, 183, 77, 0.8) !important;
+  animation: speedLineConstantLeft 1.8s infinite linear;
+}
+
+.speed-lines.paused .speed-line { 
+  animation-play-state: paused; 
+}
+
+/* POSICIÓN MÁS EXTENDIDA PARA LLENAR EL PORTAL */
+.speed-lines .speed-line:nth-child(1) { 
+  top: -45%;
+}
+.speed-lines .speed-line:nth-child(2) { 
+  top: -22.5%;
+}
+.speed-lines .speed-line:nth-child(3) { 
+  top: 0%;
+}
+.speed-lines .speed-line:nth-child(4) { 
+  top: 22.5%;
+}
+.speed-lines .speed-line:nth-child(5) { 
+  top: 45%;
+}
+
+/* MISMOS DELAYS PARA AMBOS LADOS */
+.speed-lines.left .speed-line:nth-child(1),
+.speed-lines.right .speed-line:nth-child(1) { 
+  animation-delay: 0s;
+}
+.speed-lines.left .speed-line:nth-child(2),
+.speed-lines.right .speed-line:nth-child(2) { 
+  animation-delay: 0.3s;
+}
+.speed-lines.left .speed-line:nth-child(3),
+.speed-lines.right .speed-line:nth-child(3) { 
+  animation-delay: 0.6s;
+}
+.speed-lines.left .speed-line:nth-child(4),
+.speed-lines.right .speed-line:nth-child(4) { 
+  animation-delay: 0.9s;
+}
+.speed-lines.left .speed-line:nth-child(5),
+.speed-lines.right .speed-line:nth-child(5) { 
+  animation-delay: 1.2s;
+}
+
+/* Animación para AMBOS portales (flujo HACIA la izquierda) */
+@keyframes speedLineConstantLeft {
+  0% {
+    transform: translateX(100px) scaleX(0.1);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(0) scaleX(1);
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(-100px) scaleX(0.1);
+    opacity: 0;
+  }
+}
+
+/* Efecto de partículas sutiles - IZQUIERDA */
+.speed-lines.left .speed-particle {
+  background: radial-gradient(circle, #4fc3f7, #0288d1) !important;
+  box-shadow: 0 0 4px 1.5px rgba(79, 195, 247, 0.8) !important;
+  animation: speedParticleConstantLeft 2.5s infinite linear;
+}
+
+/* Efecto de partículas sutiles - DERECHA */
+.speed-lines.right .speed-particle {
+  background: radial-gradient(circle, #ffb74d, #f57c00) !important;
+  box-shadow: 0 0 4px 1.5px rgba(255, 183, 77, 0.8) !important;
+  animation: speedParticleConstantLeft 2.5s infinite linear;
+}
+
+/* DISTRIBUCIÓN COMPLETA DE PARTÍCULAS EN TODO EL PORTAL */
+.speed-lines.left .speed-particle:nth-child(6),
+.speed-lines.right .speed-particle:nth-child(6) {
+  top: 20%; 
+  left: 45%;
+  animation-delay: 0.2s;
+}
+.speed-lines.left .speed-particle:nth-child(7),
+.speed-lines.right .speed-particle:nth-child(7) {
+  top: 35%; 
+  left: 60%;
+  animation-delay: 0.9s;
+}
+.speed-lines.left .speed-particle:nth-child(8),
+.speed-lines.right .speed-particle:nth-child(8) {
+  top: 65%;  
+  left: 40%;
+  animation-delay: 1.6s;
+}
+.speed-lines.left .speed-particle:nth-child(9),
+.speed-lines.right .speed-particle:nth-child(9) {
+  top: 80%;  
+  left: 55%;
+  animation-delay: 2.3s;
+}
+/* Partículas adicionales para mayor densidad */
+.speed-lines.left .speed-particle:nth-child(10),
+.speed-lines.right .speed-particle:nth-child(10) {
+  top: 25%;
+  left: 30%;
+  animation-delay: 0.5s;
+  width: 6px;
+  height: 6px;
+}
+.speed-lines.left .speed-particle:nth-child(11),
+.speed-lines.right .speed-particle:nth-child(11) {
+  top: 50%;
+  left: 70%;
+  animation-delay: 1.2s;
+  width: 5px;
+  height: 5px;
+}
+.speed-lines.left .speed-particle:nth-child(12),
+.speed-lines.right .speed-particle:nth-child(12) {
+  top: 75%;
+  left: 25%;
+  animation-delay: 1.8s;
+  width: 7px;
+  height: 7px;
+}
+
+/* Posiciones específicas para cada lado */
+.speed-lines.right .speed-particle:nth-child(6) { right: 45%; left: auto; }
+.speed-lines.right .speed-particle:nth-child(7) { right: 60%; left: auto; }
+.speed-lines.right .speed-particle:nth-child(8) { right: 40%; left: auto; }
+.speed-lines.right .speed-particle:nth-child(9) { right: 55%; left: auto; }
+.speed-lines.right .speed-particle:nth-child(10) { right: 30%; left: auto; }
+.speed-lines.right .speed-particle:nth-child(11) { right: 70%; left: auto; }
+.speed-lines.right .speed-particle:nth-child(12) { right: 25%; left: auto; }
+/* Animación de partículas para portales */
+@keyframes speedParticleConstantLeft {
+  0% {
+    transform: translateX(80px) translateY(var(--start-y, 0px)) scale(0.3);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(0) translateY(var(--mid-y, 0px)) scale(var(--particle-size, 0.8));
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-80px) translateY(var(--end-y, 0px)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* Variaciones en la trayectoria Y para cada partícula */
+.speed-lines.left .speed-particle:nth-child(6),
+.speed-lines.right .speed-particle:nth-child(6) {
+  --start-y: -10px;
+  --mid-y: -5px;
+  --end-y: -8px;
+  --particle-size: 0.9;
+}
+.speed-lines.left .speed-particle:nth-child(7),
+.speed-lines.right .speed-particle:nth-child(7) {
+  --start-y: 5px;
+  --mid-y: 8px;
+  --end-y: 12px;
+  --particle-size: 0.7;
+}
+.speed-lines.left .speed-particle:nth-child(8),
+.speed-lines.right .speed-particle:nth-child(8) {
+  --start-y: -15px;
+  --mid-y: -8px;
+  --end-y: -12px;
+  --particle-size: 1.0;
+}
+.speed-lines.left .speed-particle:nth-child(9),
+.speed-lines.right .speed-particle:nth-child(9) {
+  --start-y: 12px;
+  --mid-y: 15px;
+  --end-y: 10px;
+  --particle-size: 0.8;
+}
+.speed-lines.left .speed-particle:nth-child(10),
+.speed-lines.right .speed-particle:nth-child(10) {
+  --start-y: -8px;
+  --mid-y: -12px;
+  --end-y: -15px;
+  --particle-size: 1.1;
+}
+.speed-lines.left .speed-particle:nth-child(11),
+.speed-lines.right .speed-particle:nth-child(11) {
+  --start-y: 15px;
+  --mid-y: 10px;
+  --end-y: 5px;
+  --particle-size: 0.9;
+}
+.speed-lines.left .speed-particle:nth-child(12),
+.speed-lines.right .speed-particle:nth-child(12) {
+  --start-y: -20px;
+  --mid-y: -15px;
+  --end-y: -10px;
+  --particle-size: 1.2;
+}
+
+/* Tamaños variables para las partículas */
+.speed-particle {
+  width: 6px;
+  height: 6px;
+  border-radius: 45%;
+  position: absolute;
+  opacity: 0;
+}
+
+/* Eliminar cualquier regla que modifique los portales en modo oscuro */
+.dark .blackhole-portal-left,
+.dark .blackhole-portal-right {
+  filter: none !important;
+}
+
+/* Responsive: portales ligeramente más pequeños en tablet y ocultar en móvil */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .blackhole-portal-left,
+  .blackhole-portal-right {
+    width: 200px;
+    height: 200px;
+  }
+}
+@media (max-width: 640px) {
+  .blackhole-portal-left,
+  .blackhole-portal-right {
+    display: none;
+  }
+}

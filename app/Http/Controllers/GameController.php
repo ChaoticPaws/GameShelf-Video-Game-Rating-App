@@ -11,6 +11,8 @@ use App\Models\Store;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use App\Models\Screenshot;
+use App\Services\RawgApiService;
 
 class GameController extends Controller
 {
@@ -124,6 +126,7 @@ class GameController extends Controller
 
                     $gameDetails = json_decode($detailsResponse->getBody(), true);
 
+                    
                     // Combinar datos básicos con detalles
                     $gameData = array_merge($gameData, $gameDetails);
 
@@ -150,7 +153,7 @@ class GameController extends Controller
                         'developer' => isset($gameData['developers'][0]) ? $gameData['developers'][0]['name'] : null,
                         'publisher' => isset($gameData['publishers'][0]) ? $gameData['publishers'][0]['name'] : null,
                     ]);
-
+                
                     // Guardar géneros
                     if (!empty($gameData['genres'])) {
                         foreach ($gameData['genres'] as $genreData) {
@@ -231,19 +234,71 @@ class GameController extends Controller
      * Obtener detalles de un juego por su slug.
      */
     public function getDetailsBySlug($slug)
-    {
-        // Buscar el juego por su slug
-        $game = VideoGame::where('slug', $slug)->first();
+{
+    // Cargar el juego con todas sus relaciones
+    $game = VideoGame::with(['genres', 'platforms', 'stores'])
+        ->where('slug', $slug)
+        ->firstOrFail();
 
-        if (!$game) {
-            return response()->json(['error' => 'Game not found'], 404);
-        }
-
-        // Cargar relaciones (géneros, plataformas, etc.)
-        $game->load(['genres', 'platforms', 'stores']);
-
-        return response()->json($game);
+    $screenshots = [];
+    if ($game->rawg_id) {
+        $rawgResponse = app(RawgApiService::class)->getGameScreenshots($game->rawg_id);
+        $screenshots = $rawgResponse['results'] ?? [];
     }
+
+    // Estructurar la respuesta para que coincida con lo que espera el frontend
+    $gameData = [
+        'id' => $game->id,
+        'rawg_id' => $game->rawg_id,
+        'name' => $game->name,
+        'slug' => $game->slug,
+        'description' => $game->description,
+        'released' => $game->release_date,
+        'image_url' => $game->image_url,
+        'background_image' => $game->image_url, // Para compatibilidad
+        'metacritic' => $game->metacritic_score,
+        'website' => null, // Agregar si tienes este campo
+        'developers' => $game->developer ? [['name' => $game->developer]] : [],
+        'publishers' => $game->publisher ? [['name' => $game->publisher]] : [],
+        'genres' => $game->genres->map(function($genre) {
+            return [
+                'id' => $genre->id,
+                'name' => $genre->name
+            ];
+        }),
+        'platforms' => $game->platforms->map(function($platform) {
+            return [
+                'id' => $platform->id,
+                'name' => $platform->name
+            ];
+        }),
+        'stores' => $game->stores->map(function($store) {
+            return [
+                'id' => $store->id,
+                'name' => $store->name
+            ];
+        }),
+        'screenshots' => $screenshots
+    ];
+
+    return response()->json($gameData);
+}
+
+public function show($slug)
+{
+    $game = VideoGame::where('slug', $slug)->firstOrFail();
+
+    $screenshots = [];
+    if ($game->rawg_id) {
+        $screenshots = app(RawgApiService::class)->getGameScreenshots($game->rawg_id);
+    }
+
+    return view('games.show', [
+        'game' => $game,
+        'screenshots' => $screenshots['results'] ?? [],
+    ]);
+}
+
 
     /**
      * Obtener los juegos mejor valorados según las reseñas de los usuarios.

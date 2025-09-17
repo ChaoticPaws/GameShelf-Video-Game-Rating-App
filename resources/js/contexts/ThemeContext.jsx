@@ -32,9 +32,13 @@ export function ThemeProvider({ children }) {
 
     // Actualizar la clase del documento y localStorage cuando cambia el tema
     useEffect(() => {
-        // Aplicar el tema al documento completo
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(theme);
+        // Aplicar el tema al elemento HTML (necesario para Tailwind)
+        const html = document.documentElement;
+        html.classList.remove("light", "dark");
+        html.classList.add(theme);
+
+        // También aplicar al body para consistencia
+        document.body.className = theme;
 
         // Guardar el tema en localStorage
         try {

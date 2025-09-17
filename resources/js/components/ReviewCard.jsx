@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ThumbsUp, Star } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
@@ -10,15 +10,50 @@ export function ReviewCard({
     showUser = true,
     showGame = true,
     showGameImage = false,
+    maxTextLength = null, 
+    className = ""
 }) {
     const { user } = useAuth();
     const { theme } = useTheme();
     const [likes, setLikes] = useState(review.likes || 0);
     const [isLiked, setIsLiked] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [isTablet, setIsTablet] = useState(false);
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            const width = window.innerWidth;
+            setIsMobile(width < 768);
+            setIsTablet(width >= 768 && width < 1024);
+        };
+
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
+
+    const truncateText = (text) => {
+        if (!text) return "";
+        
+        // Para el diseño horizontal, usar truncado por caracteres
+        let maxLength = 160; // Caracteres para diseño horizontal
+        
+        if (maxTextLength) {
+            maxLength = maxTextLength;
+        }
+        
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        }
+        
+        return text;
+    };
+
+    const truncatedReview = truncateText(review.text);
 
     const formatDate = (dateString) => {
         if (!dateString) return null;
-
         try {
             const date = new Date(dateString);
             return isNaN(date.getTime())
@@ -54,121 +89,139 @@ export function ReviewCard({
 
     return (
         <div
-            className={`rounded-2xl p-6 mb-6 transition-all duration-300
-            ${
-                theme === "dark"
-                    ? "bg-darkBg border-gray-700"
-                    : "bg-lightBg border-gray-200"
-            }
-            shadow-lg hover:shadow-xl border`}
+            className={`rounded-2xl p-4 transition-all duration-300 h-full flex ${className}
+                ${
+                    theme === "dark"
+                        ? "bg-cyber-dark/70 border border-cyber-purple/30 backdrop-blur-sm shadow-lg shadow-cyber-purple/20 hover:shadow-cyber-pink/30"
+                        : "bg-beige-100/80 border border-brown-light/50 shadow-md shadow-brown-light/20"
+                }`}
         >
-            <div className="flex items-start gap-4">
-                {/* Game Image */}
-                {showGame && showGameImage && (
+            {/* Contenedor de imagen y estrellas */}
+            {showGame && showGameImage && (
+                <div className="flex flex-col items-center mr-4 flex-shrink-0">
+                    <div className="flex mb-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                                key={star}
+                                size={16}
+                                className={`${
+                                    star <= review.star_rating
+                                        ? "text-yellow-500 fill-yellow-500"
+                                        : theme === "dark" 
+                                            ? "text-cyber-purple/50" 
+                                            : "text-brown/40"
+                                } mr-0.5`}
+                            />
+                        ))}
+                    </div>
                     <Link
                         to={`/games/${review.game.slug}`}
-                        className="flex-shrink-0 transition-transform hover:scale-105"
+                        className={`rounded-xl overflow-hidden transition-all
+                            ${theme === "dark" 
+                                ? "border-2 border-cyber-cyan/30 hover:border-cyber-cyan" 
+                                : "border-2 border-brown/30 hover:border-brown"}
+                        `}
+                        style={{ width: "80px", height: "80px" }}
                     >
-                        <div className="w-24 h-24 rounded-xl overflow-hidden border-2 border-interactive/20">
-                            <img
-                                src={
-                                    review.game.image_url ||
-                                    "/placeholder.svg?height=150&width=150"
-                                }
-                                alt={review.game.name}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
+                        <img
+                            src={
+                                review.game.image_url ||
+                                "/placeholder.svg?height=80&width=80"
+                            }
+                            alt={review.game.name}
+                            className="w-full h-full object-cover"
+                        />
                     </Link>
-                )}
+                </div>
+            )}
 
-                <div className="flex-1 min-w-0">
-                    {/* Game Name */}
+            {/* Contenido a la derecha */}
+            <div className="flex flex-col flex-1 min-w-0">
+                <div className="flex justify-between items-start mb-2">
                     {showGame && (
                         <Link
                             to={`/games/${review.game.slug}`}
-                            className="font-semibold text-lg text-textLight dark:text-textDark hover:text-interactive transition-colors"
+                            className={`font-semibold transition-colors text-base
+                                ${theme === "dark" 
+                                    ? "text-cyber-cyan hover:text-cyber-pink" 
+                                    : "text-brown-dark hover:text-brown"}
+                            `}
                         >
                             {review.game.name}
                         </Link>
                     )}
-
-                    {/* Review Content */}
-                    <p className="my-3 text-textLight/80 dark:text-textDark/80">
-                        {review.text}
-                    </p>
-
-                    {/* Star Rating */}
-                    <div className="flex items-center mb-2">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                                key={star}
-                                size={18}
-                                className={`${
-                                    star <= review.star_rating
-                                        ? "text-yellow-500 fill-yellow-500"
-                                        : "text-gray-300 dark:text-gray-600"
-                                } mr-1`}
-                            />
-                        ))}
-                        <span className="ml-2 text-sm font-medium text-textLight/60 dark:text-textDark/60">
-                            {review.star_rating.toFixed(1)}
-                        </span>
-                    </div>
-                </div>
-
-                {/* User Info */}
-                {showUser && (
-                    <div className="flex flex-col items-end ml-4">
+                    
+                    {showUser && (
                         <Link
                             to={`/users/${review.user.name}`}
-                            className="flex items-center gap-2 group"
+                            className="flex items-center gap-2 group ml-2"
                         >
                             <div className="text-right">
-                                <span className="font-medium text-textLight dark:text-textDark group-hover:text-interactive transition-colors">
+                                <div className={`font-medium transition-colors text-sm
+                                    ${theme === "dark" 
+                                        ? "text-cyber-green group-hover:text-cyber-cyan" 
+                                        : "text-brown-dark group-hover:text-brown"}
+                                `}>
                                     {review.user.name}
-                                </span>
+                                </div>
                                 {formattedDate && (
-                                    <div className="text-xs text-textLight/60 dark:text-textDark/60">
+                                    <div className={`transition-colors text-xs
+                                        ${theme === "dark" 
+                                            ? "text-cyber-cyan/70" 
+                                            : "text-brown/70"}
+                                    `}>
                                         {formattedDate}
                                     </div>
                                 )}
                             </div>
-                            <div className="relative">
-                                <img
-                                    src={
-                                        review.user.avatar ||
-                                        "/placeholder.svg?height=40&width=40"
-                                    }
-                                    alt={review.user.name}
-                                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600 group-hover:border-interactive transition-all"
-                                />
-                                <div className="absolute inset-0 rounded-full bg-interactive/0 group-hover:bg-interactive/10 transition-all -z-10"></div>
+                            <div className="relative flex-shrink-0">
+  <img
+    src={
+      review.user.avatar ||
+      "/placeholder.svg?height=32&width=32"
+    }
+    alt={review.user.name}
+    className={`w-8 h-8 object-cover border-2 transition-all rounded-full ${
+      theme === "dark" 
+        ? "border-cyber-purple/50 group-hover:border-cyber-cyan" 
+        : "border-brown/40 group-hover:border-brown"
+    }`}
+  />
                             </div>
                         </Link>
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
 
-            {/* Like Button */}
-            <div className="flex justify-end mt-4">
-                <button
-                    onClick={handleLike}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-full transition-all
-                        ${
-                            isLiked
-                                ? "bg-interactive/10 text-interactive ring-1 ring-interactive/30"
-                                : "text-textLight/60 dark:text-textDark/60 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        }
-                        hover:scale-105 active:scale-95
-                    `}
-                >
-                    <ThumbsUp
-                        size={18}
-                        className={isLiked ? "fill-interactive" : ""}
-                    />
-                    <span className="font-medium">{likes}</span>
-                </button>
+                {/* Texto de la reseña */}
+                <p className={`text-sm leading-relaxed mb-3 flex-grow overflow-hidden
+                    ${theme === "dark" ? "text-gray-300" : "text-brown-dark/90"}
+                `}>
+                    {truncatedReview}
+                </p>
+
+                {/* Botón de like */}
+                <div className="flex justify-end">
+                    <button
+                        onClick={handleLike}
+                        className={`flex items-center gap-1 px-3 py-1 rounded-full transition-all text-sm
+                            ${theme === "dark"
+                                ? isLiked
+                                    ? "bg-cyber-pink/20 text-cyber-pink ring-1 ring-cyber-pink/30"
+                                    : "text-gray-400 hover:bg-cyber-dark/80 hover:text-cyber-cyan"
+                                : isLiked
+                                    ? "bg-brown/20 text-brown ring-1 ring-brown/30"
+                                    : "text-brown/70 hover:bg-beige-200/50 hover:text-brown"
+                            }
+                            hover:scale-105 active:scale-95
+                        `}
+                    >
+                        <ThumbsUp
+                            size={16}
+                            className={isLiked ? (theme === "dark" ? "fill-cyber-pink" : "fill-brown") : ""}
+                        />
+                        <span className="font-medium">{likes}</span>
+                    </button>
+                </div>
             </div>
         </div>
     );

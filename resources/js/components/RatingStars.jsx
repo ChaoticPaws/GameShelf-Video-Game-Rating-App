@@ -105,26 +105,27 @@ export function RatingStars({
             <div className="flex items-center">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <button
-                        key={star}
-                        type="button"
-                        disabled={disabled || isLoading}
-                        onClick={() => handleRating(star)}
-                        onMouseEnter={() => !disabled && setHoveredRating(star)}
-                        onMouseLeave={() => !disabled && setHoveredRating(0)}
-                        className={`focus:outline-none ${
-                            disabled ? "cursor-default" : "cursor-pointer"
-                        }`}
-                        aria-label={`Rate ${star} out of 5`}
-                    >
-                        <Star
-                            size={size}
-                            className={`transition-colors duration-150 ${
-                                (hoveredRating || rating) >= star
-                                    ? "text-yellow-500 fill-yellow-500"
-                                    : "text-gray-300 dark:text-gray-600"
-                            } ${isLoading ? "animate-pulse" : ""}`}
-                        />
-                    </button>
+  key={star}
+  type="button"
+  disabled={disabled || isLoading}
+  onClick={() => handleRating(star)}
+  onMouseEnter={() => !disabled && setHoveredRating(star)}
+  onMouseLeave={() => !disabled && setHoveredRating(0)}
+  className={`focus:outline-none ${
+    disabled ? "cursor-default" : "cursor-pointer"
+  }`}
+  aria-label={`Rate ${star} out of 5`}
+>
+  <Star
+    size={size}
+    className={`transition-colors duration-150 ${
+      (hoveredRating || rating) >= star
+        ? "text-[#FFAB00] fill-[#FBC02D]"
+        : "text-[#FFAB00] dark:text-[#FFFF00]/80"
+    } ${isLoading ? "animate-pulse" : ""}`}
+    strokeWidth={1.5} 
+  />
+</button>
                 ))}
             </div>
 

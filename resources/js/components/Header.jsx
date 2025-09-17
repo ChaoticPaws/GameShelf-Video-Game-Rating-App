@@ -8,412 +8,289 @@ import { SearchBar } from "./SearchBar";
 import ThemeSwitch from "./ThemeSwitch";
 
 export const Header = ({ toggleSearchBar }) => {
-    const { isAuthenticated, user, logout } = useAuth();
-    const { theme, toggleTheme } = useTheme();
-    const [showMobileMenu, setShowMobileMenu] = useState(false);
-    const [showUserMenu, setShowUserMenu] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
-    const userMenuRef = useRef(null);
-    const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef(null);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const isScrolled = window.scrollY > 10;
-            if (isScrolled !== scrolled) {
-                setScrolled(isScrolled);
-            }
-        };
-
-        document.addEventListener("scroll", handleScroll, { passive: true });
-        return () => {
-            document.removeEventListener("scroll", handleScroll);
-        };
-    }, [scrolled]);
-
-    const toggleMobileMenu = () => {
-        setShowMobileMenu(!showMobileMenu);
-    };
-
-    const toggleUserMenu = () => {
-        setShowUserMenu(!showUserMenu);
-    };
-
-    const handleLogout = async () => {
-        await logout();
-        navigate("/login");
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setShowUserMenu(false);
+      }
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                userMenuRef.current &&
-                !userMenuRef.current.contains(event.target)
-            ) {
-                setShowUserMenu(false);
-            }
-        };
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+    setShowUserMenu(false);
+  };
 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+  return (
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b transition-all duration-500 ease-in-out ${
+          theme === "dark"
+            ? "bg-cyber-dark/30 border-cyber-purple/30 shadow-[0_2px_30px_-10px_rgba(0,0,0,0.3)]"
+            : "bg-lightBg/30 border-gray-200/30 shadow-[0_2px_30px_-10px_rgba(0,0,0,0.1)]"
+        }`}
+        style={{ height: "4rem" }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
+          {/* Logo a la izquierda*/}
+          <Link to="/" className="flex-shrink-0">
+            <img src="/images/logo2.png" alt="Logo" className="w-40" />
+          </Link>
 
-    return (
-        <header
-            className={`
-                fixed top-0 left-0 right-0 z-50 
-                transition-all duration-300 
-                ${
-                    theme === "dark"
-                        ? scrolled
-                            ? "bg-header/95 shadow-lg backdrop-blur-sm"
-                            : "bg-header"
-                        : scrolled
-                        ? "bg-lightBg/95 shadow-lg backdrop-blur-sm"
-                        : "bg-lightBg"
-                }
-                border-b ${
-                    theme === "dark" ? "border-header/20" : "border-gray-200"
-                }
-            `}
-        >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16 items-center">
-                    {/* Logo */}
-                    <div className="flex-shrink-0 flex items-center">
-                        <Link to="/" className="flex items-center">
-                            <img
-                                src="/images/logo.png"
-                                alt="Logo"
-                                className="w-40"
-                            />
-                        </Link>
-                    </div>
+          {/* Contenedor flexible para el resto */}
+          <div className="flex items-center flex-1 justify-between ml-6">
+           
+            <nav className="hidden md:flex space-x-6 min-w-[150px]">
+              <Link
+                to="/"
+                className={`text-sm font-medium ${
+                  theme === "dark" ? "text-cyber-cyan" : "text-textLight"
+                } hover:text-interactive transition-colors dark:hover:text-cyber-green`}
+              >
+                Home
+              </Link>
+              <Link
+                to="/games"
+                className={`text-sm font-medium ${
+                  theme === "dark" ? "text-cyber-cyan" : "text-textLight"
+                } hover:text-interactive transition-colors dark:hover:text-cyber-green`}
+              >
+                Games
+              </Link>
+            </nav>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                        <Link
-                            to="/"
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                theme === "dark"
-                                    ? "text-textDark hover:text-interactive"
-                                    : "text-textLight hover:text-interactive"
-                            }`}
-                        >
-                            Home
-                        </Link>
-                        <Link
-                            to="/games"
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                theme === "dark"
-                                    ? "text-textDark hover:text-interactive"
-                                    : "text-textLight hover:text-interactive"
-                            }`}
-                        >
-                            Games
-                        </Link>
-                    </div>
-
-                    {/* Right side icons */}
-                    <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
-                        {/* Search button */}
-                        <button
-                            onClick={toggleSearchBar}
-                            className={`p-2 rounded-full transition-colors duration-200 ${
-                                theme === "dark"
-                                    ? "text-textDark/80 hover:text-interactive hover:bg-header/10"
-                                    : "text-textLight/80 hover:text-interactive hover:bg-lightBg/10"
-                            }`}
-                            aria-label="Search"
-                        >
-                            <svg
-                                className="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                />
-                            </svg>
-                        </button>
-
-                        {/* Theme Switch */}
-                        <ThemeSwitch
-                            checked={theme === "dark"}
-                            onChange={toggleTheme}
-                        />
-
-                        {/* Profile dropdown */}
-                        {isAuthenticated ? (
-                            <div className="ml-4 relative" ref={userMenuRef}>
-                                <div>
-                                    <button
-                                        onClick={toggleUserMenu}
-                                        className="flex items-center max-w-xs rounded-full focus:outline-none"
-                                        aria-label="User menu"
-                                    >
-                                        <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-interactive hover:border-interactiveHover transition-colors">
-                                            {user?.avatar ? (
-                                                <img
-                                                    src={
-                                                        user.avatar ||
-                                                        "/images/default-avatar.png"
-                                                    }
-                                                    alt={user.name}
-                                                    className="h-full w-full object-cover"
-                                                />
-                                            ) : (
-                                                <div className="h-full w-full flex items-center justify-center bg-interactive">
-                                                    <span className="text-white text-xs font-bold">
-                                                        {user?.name
-                                                            .charAt(0)
-                                                            .toUpperCase()}
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </button>
-                                </div>
-
-                                {showUserMenu && (
-                                    <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-lightBg dark:bg-darkBg ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 dark:divide-gray-700">
-                                        <div className="py-1">
-                                            <Link
-                                                to={`/users/${user?.name}`}
-                                                onClick={() =>
-                                                    setShowUserMenu(false)
-                                                }
-                                                className="block px-4 py-2 text-sm text-textLight dark:text-textDark hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                                Your Profile
-                                            </Link>
-                                            <Link
-                                                to="/settings"
-                                                onClick={() =>
-                                                    setShowUserMenu(false)
-                                                }
-                                                className="block px-4 py-2 text-sm text-textLight dark:text-textDark hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                                Settings
-                                            </Link>
-                                        </div>
-                                        <div className="py-1">
-                                            <button
-                                                onClick={handleLogout}
-                                                className="block w-full text-left px-4 py-2 text-sm text-textLight dark:text-textDark hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                                Sign out
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <div className="flex items-center space-x-4 ml-4">
-                                <Link
-                                    to="/login"
-                                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                        theme === "dark"
-                                            ? "text-textDark hover:text-interactive"
-                                            : "text-textLight hover:text-interactive"
-                                    }`}
-                                >
-                                    Sign in
-                                </Link>
-                                <Link
-                                    to="/register"
-                                    className="px-4 py-2 rounded-md bg-interactive text-white text-sm font-medium hover:bg-interactiveHover transition-all duration-200 shadow-sm"
-                                >
-                                    Sign up
-                                </Link>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Mobile menu button */}
-                    <div className="-mr-2 flex items-center md:hidden">
-                        <button
-                            onClick={toggleMobileMenu}
-                            type="button"
-                            className={`md:hidden inline-flex items-center justify-center p-2 rounded-md focus:outline-none transition duration-150 ease-in-out ${
-                                theme === "dark"
-                                    ? "text-textDark/80 hover:text-interactive hover:bg-header/10"
-                                    : "text-textLight/80 hover:text-interactive hover:bg-lightBg/10"
-                            }`}
-                            aria-label="Toggle menu"
-                        >
-                            {showMobileMenu ? (
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            ) : (
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                </svg>
-                            )}
-                        </button>
-                    </div>
-                </div>
+            {/* Barra de búsqueda*/}
+            <div className="hidden md:block flex-1 max-w-md ml-8">
+              <SearchBar />
             </div>
 
-            {/* Mobile menu */}
-            {showMobileMenu && (
-                <div
-                    className={`md:hidden ${
-                        theme === "dark" ? "bg-header" : "bg-lightBg"
-                    }`}
-                >
-                    <div className="pt-2 pb-3 space-y-1">
+            {/* Contenedor para Auth y ThemeSwitch SOLO en escritorio */}
+            <div className="hidden md:flex items-center space-x-4 ml-8">
+              {isAuthenticated ? (
+                <div className="relative" ref={userMenuRef}>
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center max-w-xs rounded-full focus:outline-none"
+                    aria-label="User menu"
+                  >
+                    <div className={`h-8 w-8 rounded-full overflow-hidden border-2 ${
+                      theme === "dark" 
+                        ? "border-cyber-cyan hover:border-cyber-green" 
+                        : "border-interactive hover:border-interactiveHover"
+                    } transition-colors`}>
+                      {user?.avatar ? (
+                        <img
+                          src={user.avatar || "/images/default-avatar.png"}
+                          alt={user.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className={`h-full w-full flex items-center justify-center ${
+                          theme === "dark" ? "bg-cyber-cyan" : "bg-interactive"
+                        }`}>
+                          <span className="text-white text-xs font-bold">
+                            {user?.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </button>
+
+                  {showUserMenu && (
+                    <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-lightBg dark:bg-cyber-dark ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 dark:divide-cyber-purple/30">
+                      <div className="py-1">
                         <Link
-                            to="/"
-                            onClick={() => setShowMobileMenu(false)}
-                            className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                                theme === "dark"
-                                    ? "text-textDark hover:text-interactive hover:bg-header/10"
-                                    : "text-textLight hover:text-interactive hover:bg-lightBg/10"
-                            }`}
+                          to={`/users/${user?.name}`}
+                          onClick={() => setShowUserMenu(false)}
+                          className="block px-4 py-2 text-sm text-textLight dark:text-cyber-cyan hover:bg-gray-100 dark:hover:bg-cyber-purple/20"
                         >
-                            Home
+                          Your Profile
                         </Link>
                         <Link
-                            to="/games"
-                            onClick={() => setShowMobileMenu(false)}
-                            className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                                theme === "dark"
-                                    ? "text-textDark hover:text-interactive hover:bg-header/10"
-                                    : "text-textLight hover:text-interactive hover:bg-lightBg/10"
-                            }`}
+                          to="/settings"
+                          onClick={() => setShowUserMenu(false)}
+                          className="block px-4 py-2 text-sm text-textLight dark:text-cyber-cyan hover:bg-gray-100 dark:hover:bg-cyber-purple/20"
                         >
-                            Games
+                          Settings
                         </Link>
+                      </div>
+                      <div className="py-1">
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-4 py-2 text-sm text-textLight dark:text-cyber-cyan hover:bg-gray-100 dark:hover:bg-cyber-purple/20"
+                        >
+                          Sign out
+                        </button>
+                      </div>
                     </div>
-                    <div className="pt-4 pb-3 border-t border-header/20 dark:border-darkBg/30">
-                        {isAuthenticated ? (
-                            <>
-                                <div className="flex items-center px-5">
-                                    <div className="flex-shrink-0">
-                                        <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-interactive">
-                                            {user?.avatar ? (
-                                                <img
-                                                    src={
-                                                        user.avatar ||
-                                                        "/placeholder.svg"
-                                                    }
-                                                    alt={user.name}
-                                                    className="h-full w-full object-cover"
-                                                />
-                                            ) : (
-                                                <div className="h-full w-full flex items-center justify-center bg-interactive">
-                                                    <span className="text-white text-sm font-bold">
-                                                        {user?.name
-                                                            .charAt(0)
-                                                            .toUpperCase()}
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="ml-3">
-                                        <div
-                                            className={`text-base font-medium ${
-                                                theme === "dark"
-                                                    ? "text-textDark"
-                                                    : "text-textLight"
-                                            }`}
-                                        >
-                                            {user?.name}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-3 space-y-1">
-                                    <Link
-                                        to={`/users/${user?.name}`}
-                                        onClick={() => setShowMobileMenu(false)}
-                                        className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                                            theme === "dark"
-                                                ? "text-textDark hover:text-interactive hover:bg-header/10"
-                                                : "text-textLight hover:text-interactive hover:bg-lightBg/10"
-                                        }`}
-                                    >
-                                        Your Profile
-                                    </Link>
-                                    <Link
-                                        to="/settings"
-                                        onClick={() => setShowMobileMenu(false)}
-                                        className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                                            theme === "dark"
-                                                ? "text-textDark hover:text-interactive hover:bg-header/10"
-                                                : "text-textLight hover:text-interactive hover:bg-lightBg/10"
-                                        }`}
-                                    >
-                                        Settings
-                                    </Link>
-                                    <button
-                                        onClick={() => {
-                                            handleLogout();
-                                            setShowMobileMenu(false);
-                                        }}
-                                        className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                                            theme === "dark"
-                                                ? "text-textDark hover:text-interactive hover:bg-header/10"
-                                                : "text-textLight hover:text-interactive hover:bg-lightBg/10"
-                                        }`}
-                                    >
-                                        Sign out
-                                    </button>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="px-2 pt-2 pb-3 space-y-1">
-                                <Link
-                                    to="/login"
-                                    onClick={() => setShowMobileMenu(false)}
-                                    className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                                        theme === "dark"
-                                            ? "text-textDark hover:text-interactive hover:bg-header/10"
-                                            : "text-textLight hover:text-interactive hover:bg-lightBg/10"
-                                    }`}
-                                >
-                                    Sign in
-                                </Link>
-                                <Link
-                                    to="/register"
-                                    onClick={() => setShowMobileMenu(false)}
-                                    className="block w-full px-3 py-2 rounded-md bg-interactive text-white text-base font-medium hover:bg-interactiveHover transition-all duration-200 shadow-sm text-center"
-                                >
-                                    Sign up
-                                </Link>
-                            </div>
-                        )}
-                    </div>
+                  )}
                 </div>
-            )}
-        </header>
-    );
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                      theme === "dark"
+                        ? "text-cyber-cyan hover:text-cyber-green"
+                        : "text-textLight hover:text-interactive"
+                    }`}
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    to="/register"
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-sm ${
+                      theme === "dark"
+                        ? "bg-cyber-cyan hover:bg-cyber-green text-cyber-dark"
+                        : "bg-interactive hover:bg-interactiveHover text-white"
+                    }`}
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
+
+              {/* Switch de tema a la derecha*/}
+              <div>
+                <ThemeSwitch checked={theme === "dark"} onChange={toggleTheme} />
+              </div>
+            </div>
+          </div>
+
+          {/* Menú hamburguesa y elementos móviles */}
+          <div className="md:hidden flex items-center justify-end flex-1 space-x-3 ml-auto z-50">
+            {/* Barra de búsqueda en móvil - en el header */}
+            <div className="md:hidden flex-1 max-w-xs mx-2">
+              <SearchBar />
+            </div>
+
+            {/* Switch tema móvil */}
+            <ThemeSwitch checked={theme === "dark"} onChange={toggleTheme} />
+
+            {/* Botón menú hamburguesa móvil */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className={`p-2 rounded-md transition-colors duration-200 ${
+                theme === "dark"
+                  ? "text-cyber-cyan hover:text-cyber-green bg-cyber-dark/30 backdrop-blur-xl border border-cyber-purple/30"
+                  : "text-textLight/80 hover:text-interactive bg-lightBg/30 backdrop-blur-xl border border-gray-200/30"
+              }`}
+              aria-label="Toggle menu"
+            >
+              {showMobileMenu ? (
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Menú hamburguesa desplegable solo en móvil, fuera del header */}
+      {showMobileMenu && (
+        <div
+          className={`md:hidden fixed top-16 left-0 w-full z-40 px-4 pt-4 pb-3 space-y-1 backdrop-blur-md ${
+            theme === "dark"
+              ? "bg-cyber-dark/90 text-cyber-cyan"
+              : "bg-lightBg/90 text-textLight"
+          }`}
+        >
+          <Link
+            to="/"
+            className="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyber-purple/20 dark:hover:bg-cyber-purple/20"
+            onClick={() => setShowMobileMenu(false)}
+          >
+            Home
+          </Link>
+          <Link
+            to="/games"
+            className="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyber-purple/20 dark:hover:bg-cyber-purple/20"
+            onClick={() => setShowMobileMenu(false)}
+          >
+            Games
+          </Link>
+
+          {!isAuthenticated ? (
+            <>
+              <Link
+                to="/login"
+                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyber-purple/20 dark:hover:bg-cyber-purple/20"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Sign in
+              </Link>
+              <Link
+                to="/register"
+                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyber-purple/20 dark:hover:bg-cyber-purple/20"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Sign up
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to={`/users/${user?.name}`}
+                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyber-purple/20 dark:hover:bg-cyber-purple/20"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Your Profile
+              </Link>
+              <Link
+                to="/settings"
+                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyber-purple/20 dark:hover:bg-cyber-purple/20"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Settings
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setShowMobileMenu(false);
+                }}
+                className="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-cyber-purple/20 dark:hover:bg-cyber-purple/20"
+              >
+                Sign out
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </>
+  );
 };

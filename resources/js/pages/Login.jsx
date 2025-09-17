@@ -61,23 +61,23 @@ export const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-lightBg dark:bg-darkBg">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-lightBg dark:bg-cyber-dark">
             <div className="w-full max-w-md">
                 {/* Formulario */}
-                <div className="bg-white dark:bg-header rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-cyber-purple/20">
                     {/* Cabecera */}
-                    <div className="bg-heading dark:bg-accent-dark p-6 text-center">
+                    <div className="bg-heading dark:bg-gradient-to-r dark:from-cyber-purple/80 dark:to-cyber-pink/80 p-6 text-center">
                         <h2 className="text-3xl font-bold text-white drop-shadow-md">
                             Welcome Back!
                         </h2>
-                        <p className="text-pink-100 dark:text-accent-light mt-1">
+                        <p className="text-pink-100 dark:text-cyan-200 mt-1">
                             Sign in to your account
                         </p>
                     </div>
 
                     <div className="p-8">
                         {error && (
-                            <div className="mb-6 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-4 rounded-xl border-l-4 border-red-500 dark:border-red-400 animate-pulse">
+                            <div className="mb-6 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-200 p-4 rounded-xl border-l-4 border-red-500 dark:border-red-400">
                                 <span className="font-bold">⚠️ Error:</span>{" "}
                                 {error}
                             </div>
@@ -87,7 +87,7 @@ export const Login = () => {
                             <div>
                                 <label
                                     htmlFor="email"
-                                    className="block text-sm font-medium text-textLight dark:text-textDark mb-2"
+                                    className="block text-sm font-medium text-textLight dark:text-cyan-100 mb-2"
                                 >
                                     Email Address
                                 </label>
@@ -98,7 +98,7 @@ export const Login = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 focus:border-heading dark:focus:border-accent focus:ring-2 focus:ring-pink-200 dark:focus:ring-accent-light bg-white dark:bg-gray-700 text-textLight dark:text-textDark placeholder-gray-400 dark:placeholder-gray-400 transition-all shadow-inner"
+                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-cyber-purple/30 focus:border-heading dark:focus:border-cyber-cyan focus:ring-2 focus:ring-pink-200 dark:focus:ring-cyber-cyan/20 bg-white dark:bg-gray-700/80 text-textLight dark:text-gray-200 placeholder-gray-400 dark:placeholder-cyan-100/50 transition-all shadow-inner"
                                     placeholder="your@email.com"
                                 />
                             </div>
@@ -106,7 +106,7 @@ export const Login = () => {
                             <div>
                                 <label
                                     htmlFor="password"
-                                    className="block text-sm font-medium text-textLight dark:text-textDark mb-2"
+                                    className="block text-sm font-medium text-textLight dark:text-cyan-100 mb-2"
                                 >
                                     Password
                                 </label>
@@ -117,7 +117,7 @@ export const Login = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     required
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 focus:border-heading dark:focus:border-accent focus:ring-2 focus:ring-pink-200 dark:focus:ring-accent-light bg-white dark:bg-gray-700 text-textLight dark:text-textDark placeholder-gray-400 dark:placeholder-gray-400 transition-all shadow-inner"
+                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-cyber-purple/30 focus:border-heading dark:focus:border-cyber-cyan focus:ring-2 focus:ring-pink-200 dark:focus:ring-cyber-cyan/20 bg-white dark:bg-gray-700/80 text-textLight dark:text-gray-200 placeholder-gray-400 dark:placeholder-cyan-100/50 transition-all shadow-inner"
                                     placeholder="••••••••"
                                 />
                             </div>
@@ -125,7 +125,7 @@ export const Login = () => {
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full bg-heading dark:bg-accent hover:bg-[#E00050] dark:hover:bg-accent-dark text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+                                className="w-full bg-heading dark:bg-gradient-to-r dark:from-cyber-purple/90 dark:to-cyber-pink/90 hover:bg-[#E00050] dark:hover:from-cyber-purple dark:hover:to-cyber-pink text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
                             >
                                 {submitting ? (
                                     <>
@@ -162,7 +162,7 @@ export const Login = () => {
                         <div className="mt-6 text-center">
                             <a
                                 href="#"
-                                className="text-sm text-heading dark:text-accent hover:text-[#CC0047] dark:hover:text-accent-dark font-medium hover:underline"
+                                className="text-sm text-heading dark:text-cyan-300 hover:text-[#CC0047] dark:hover:text-cyan-100 font-medium hover:underline"
                             >
                                 Forgot your password?
                             </a>
@@ -171,14 +171,14 @@ export const Login = () => {
                 </div>
 
                 <div className="mt-8 text-center">
-                    <p className="text-textLight dark:text-textDark font-medium">
+                    <p className="text-textLight dark:text-cyan-100 font-medium">
                         Don't have an account?{" "}
                         <a
-                            href="/register"
-                            className="text-heading dark:text-accent hover:text-[#E00050] dark:hover:text-accent-dark font-bold underline"
-                        >
-                            Register here
-                        </a>
+    href="/register"
+    className="text-heading dark:text-cyan-300 hover:text-[#E00050] dark:hover:text-cyber-green font-bold underline"
+>
+    Register here
+</a>
                     </p>
                 </div>
             </div>

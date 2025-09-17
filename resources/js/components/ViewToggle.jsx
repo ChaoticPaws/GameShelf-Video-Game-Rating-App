@@ -1,3 +1,4 @@
+// ViewToggle.jsx
 "use client";
 
 import { Grid, List } from "lucide-react";

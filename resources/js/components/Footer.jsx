@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
-import { Github, Twitter } from "lucide-react";
+import { Github } from "lucide-react";
 
 export function Footer() {
     const { theme } = useTheme();
@@ -8,102 +8,79 @@ export function Footer() {
 
     return (
         <footer
-            className={`py-12 ${
+            className={`py-8 ${
                 theme === "dark"
-                    ? "bg-header text-textDark" // Fondo azul oscuro y texto claro en modo noche
-                    : "bg-lightBg text-textLight" // Fondo blanco y texto oscuro en modo día
+                    ? "bg-cyber-dark text-cyber-cyan border-t border-cyber-purple/30"
+                    : "bg-lightBg/50 text-textLight"
             }`}
         >
             <div className="container mx-auto px-4">
-                <div className="flex flex-col md:flex-row justify-between items-start">
+                <div className="flex flex-wrap md:flex-nowrap justify-between gap-8">
                     {/* Logo y descripción */}
-                    <div className="mb-8 md:mb-0">
+                    <div className="flex-shrink-0 max-w-xs">
                         <Link to="/" className="flex items-center">
                             <img
-                                src="/images/logo.png"
+                                src="/images/logo2.png"
                                 alt="Logo"
-                                className="w-40"
+                                className="w-36"
                             />
                         </Link>
-                        <p className="mt-2 text-sm max-w-xs">
+                        <p className="mt-3 text-sm leading-relaxed max-w-xs">
                             Track, rate, and discover your next favorite video
                             game.
                         </p>
                         <p
-                            className={`mt-1 text-xs ${
+                            className={`mt-2 text-xs ${
                                 theme === "dark"
-                                    ? "text-textDark/70"
-                                    : "text-textLight/70"
+                                    ? "text-cyber-cyan/70"
+                                    : "text-textLight/60"
                             }`}
                         >
-                            Developed by Rachni
+                            Developed by Rachni & ChaoticPaws
                         </p>
                     </div>
 
                     {/* Enlaces y redes sociales */}
-                    <div className="flex flex-col md:flex-row md:space-x-12">
+                    <div className="flex flex-col md:flex-row md:space-x-16 space-y-6 md:space-y-0">
                         {/* Enlaces rápidos */}
-                        <div className="mb-8 md:mb-0">
-                            <h3 className="font-semibold mb-4">Links</h3>
+                        <div>
+                            <h3 className={`font-semibold mb-4 text-sm ${
+                                theme === "dark" 
+                                    ? "text-cyber-pink" 
+                                    : "text-heading"
+                            }`}>
+                                Links
+                            </h3>
                             <ul className="space-y-2">
-                                <li>
-                                    <Link
-                                        to="/"
-                                        className={`text-sm hover:text-interactive transition-colors duration-300 ${
-                                            theme === "dark"
-                                                ? "text-textDark"
-                                                : "text-textLight"
-                                        }`}
-                                    >
-                                        Home
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        to="/search"
-                                        className={`text-sm hover:text-interactive transition-colors duration-300 ${
-                                            theme === "dark"
-                                                ? "text-textDark"
-                                                : "text-textLight"
-                                        }`}
-                                    >
-                                        Browse Games
-                                    </Link>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className={`text-sm hover:text-interactive transition-colors duration-300 ${
-                                            theme === "dark"
-                                                ? "text-textDark"
-                                                : "text-textLight"
-                                        }`}
-                                    >
-                                        About
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className={`text-sm hover:text-interactive transition-colors duration-300 ${
-                                            theme === "dark"
-                                                ? "text-textDark"
-                                                : "text-textLight"
-                                        }`}
-                                    >
-                                        Privacy Policy
-                                    </a>
-                                </li>
+                                {[
+                                    { text: "Home", to: "/" },
+                                    { text: "Browse Games", to: "/search" },
+                                    { text: "About", to: "#" },
+                                    { text: "Privacy Policy", to: "#" },
+                                ].map(({ text, to }) => (
+                                    <li key={text}>
+                                        <Link
+                                            to={to}
+                                            className={`text-sm transition-colors duration-300 ${
+                                                theme === "dark"
+                                                    ? "text-cyber-cyan hover:text-cyber-green"
+                                                    : "text-textLight hover:text-interactive"
+                                            }`}
+                                        >
+                                            {text}
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
 
                         {/* Redes sociales */}
                         <div>
                             <h3
-                                className={`font-semibold mb-4 ${
+                                className={`font-semibold mb-4 text-sm ${
                                     theme === "dark"
-                                        ? "text-textDark"
-                                        : "text-textLight"
+                                        ? "text-cyber-pink"
+                                        : "text-heading"
                                 }`}
                             >
                                 Connect
@@ -113,14 +90,14 @@ export function Footer() {
                                     href="https://github.com/Rachni"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`hover:text-interactive transition-colors duration-300 ${
+                                    className={`transition-colors duration-300 ${
                                         theme === "dark"
-                                            ? "text-textDark"
-                                            : "text-textLight"
+                                            ? "text-cyber-cyan hover:text-cyber-green"
+                                            : "text-textLight hover:text-interactive"
                                     }`}
                                     aria-label="GitHub"
                                 >
-                                    <Github size={24} />
+                                    <Github size={20} />
                                 </a>
                             </div>
                         </div>
@@ -129,24 +106,24 @@ export function Footer() {
 
                 {/* Derechos de autor */}
                 <div
-                    className={`mt-12 pt-8 border-t ${
+                    className={`mt-10 pt-6 border-t text-center text-sm ${
                         theme === "dark"
-                            ? "border-header/30"
-                            : "border-gray-200"
-                    } text-center text-sm ${
-                        theme === "dark"
-                            ? "text-textDark/80"
-                            : "text-textLight/80"
+                            ? "text-cyber-cyan/70 border-cyber-purple/30"
+                            : "text-textLight/60 border-gray-300"
                     }`}
                 >
                     <p>&copy; {currentYear} GameShelf.</p>
-                    <p className="mt-1">
+                    <p className="mt-2">
                         Powered by{" "}
                         <a
                             href="https://rawg.io/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-interactive hover:underline transition-colors duration-300"
+                            className={`transition-colors duration-300 ${
+                                theme === "dark"
+                                    ? "text-cyber-cyan hover:text-cyber-green"
+                                    : "text-interactive hover:underline"
+                            }`}
                         >
                             RAWG API
                         </a>

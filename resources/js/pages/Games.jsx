@@ -157,34 +157,34 @@ export function Games() {
     const toggleMobileFilters = () => setFiltersOpen(!filtersOpen);
 
     return (
-        <div className="container mx-auto px-4 py-8 bg-lightBg dark:bg-darkBg relative">
+        <div className="container mx-auto px-4 py-8 bg-lightBg dark:bg-cyber-dark relative">
+            
             {/* Under Construction Modal */}
-            {/* Under Construction Modal */}
-{showUnderConstruction && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-        <div className="relative bg-white dark:bg-header p-6 rounded-lg max-w-2xl w-full text-center shadow-xl">
-            <div className="mb-4 flex justify-center w-full">
-                <img
-                    src="/images/404.png"
-                    alt="Under construction"
-                    className="max-h-[400px] object-contain" // Tamaño aumentado
-                />
-            </div>
-            <p className="text-lg text-textLight dark:text-textDark mb-6">
-                I'm working hard to improve your experience. Please
-                check back soon!
-            </p>
-            <button
-                onClick={() => setShowUnderConstruction(false)}
-                className="bg-heading hover:bg-[#E00050] text-white font-bold py-2 px-6 rounded-full transition-colors"
-            >
-                I understand, show me anyway
-            </button>
-        </div>
-    </div>
-)}
+            {showUnderConstruction && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+                    <div className="relative bg-white dark:bg-cyber-dark p-6 rounded-lg max-w-2xl w-full text-center shadow-xl">
+                        <div className="mb-4 flex justify-center w-full">
+                            <img
+                                src="/images/404.png"
+                                alt="Under construction"
+                                className="max-h-[400px] object-contain"
+                            />
+                        </div>
+                        <p className="text-lg text-textLight dark:text-cyber-cyan mb-6">
+                            I'm working hard to improve your experience. Please
+                            check back soon!
+                        </p>
+                        <button
+                            onClick={() => setShowUnderConstruction(false)}
+                            className="bg-heading hover:bg-[#E00050] text-white font-bold py-2 px-6 rounded-full transition-colors"
+                        >
+                            I understand, show me anyway
+                        </button>
+                    </div>
+                </div>
+            )}
 
-            <h1 className="text-3xl font-bold mb-6 text-heading dark:text-textDark">
+            <h1 className="text-3xl font-bold mb-6 text-heading dark:text-cyber-pink">
                 Games
             </h1>
 
@@ -192,13 +192,13 @@ export function Games() {
             <div className="md:hidden mb-4">
                 <button
                     onClick={toggleMobileFilters}
-                    className="w-full flex items-center justify-between p-3 bg-gray-200 dark:bg-gray-700 rounded-lg"
+                    className="w-full flex items-center justify-between p-3 bg-gray-200 dark:bg-cyber-black rounded-lg"
                 >
-                    <span className="font-medium text-textLight dark:text-textDark">
+                    <span className="font-medium text-textLight dark:text-cyber-cyan">
                         Filters
                     </span>
                     <ChevronDown
-                        className={`h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform ${
+                        className={`h-5 w-5 text-gray-600 dark:text-cyber-green transition-transform ${
                             filtersOpen ? "rotate-180" : ""
                         }`}
                     />
@@ -212,8 +212,8 @@ export function Games() {
                         filtersOpen ? "block" : "hidden"
                     } md:block`}
                 >
-                    <div className="bg-white dark:bg-header p-4 rounded-lg shadow border border-gray-200 dark:border-gray-700">
-                        <h2 className="text-xl font-semibold mb-4 text-heading dark:text-textDark">
+                    <div className="bg-white dark:bg-cyber-dark p-4 rounded-lg shadow border border-gray-200 dark:border-cyber-purple">
+                        <h2 className="text-xl font-semibold mb-4 text-heading dark:text-cyber-pink">
                             Filters
                         </h2>
 
@@ -229,26 +229,26 @@ export function Games() {
                                 <input
                                     type="text"
                                     placeholder="Search games..."
-                                    className="w-full p-2 pl-10 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-textLight dark:text-textDark focus:ring-2 focus:ring-heading focus:border-transparent"
+                                    className="w-full p-2 pl-10 rounded-lg bg-white dark:bg-cyber-black border border-gray-300 dark:border-cyber-purple text-textLight dark:text-cyber-cyan focus:ring-2 focus:ring-heading dark:focus:ring-cyber-pink focus:border-transparent"
                                     value={searchQuery}
                                     onChange={handleInputChange}
                                     onKeyDown={handleKeyDown}
                                 />
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-cyber-green" />
                             </form>
                         </div>
 
                         {/* Genre Filters */}
-                        <div className="mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                        <div className="mb-4 border-b border-gray-200 dark:border-cyber-purple pb-2">
                             <div
                                 className="flex items-center justify-between cursor-pointer"
                                 onClick={() => setGenresOpen(!genresOpen)}
                             >
-                                <h3 className="font-medium text-heading dark:text-textDark mb-2">
+                                <h3 className="font-medium text-heading dark:text-cyber-cyan mb-2">
                                     Genres
                                 </h3>
                                 <ChevronDown
-                                    className={`h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform ${
+                                    className={`h-5 w-5 text-gray-600 dark:text-cyber-green transition-transform ${
                                         genresOpen ? "rotate-180" : ""
                                     }`}
                                 />
@@ -271,11 +271,11 @@ export function Games() {
                                                         genre.id.toString()
                                                     )
                                                 }
-                                                className="mr-2 rounded text-heading focus:ring-heading"
+                                                className="mr-2 rounded text-heading dark:text-cyber-pink focus:ring-heading dark:focus:ring-cyber-pink"
                                             />
                                             <label
                                                 htmlFor={`genre-${genre.id}`}
-                                                className="text-textLight dark:text-textDark"
+                                                className="text-textLight dark:text-cyber-cyan"
                                             >
                                                 {genre.name} (
                                                 {genre.games_count || 0})
@@ -287,16 +287,16 @@ export function Games() {
                         </div>
 
                         {/* Platform Filters */}
-                        <div className="mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                        <div className="mb-4 border-b border-gray-200 dark:border-cyber-purple pb-2">
                             <div
                                 className="flex items-center justify-between cursor-pointer"
                                 onClick={() => setPlatformsOpen(!platformsOpen)}
                             >
-                                <h3 className="font-medium text-heading dark:text-textDark mb-2">
+                                <h3 className="font-medium text-heading dark:text-cyber-cyan mb-2">
                                     Platforms
                                 </h3>
                                 <ChevronDown
-                                    className={`h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform ${
+                                    className={`h-5 w-5 text-gray-600 dark:text-cyber-green transition-transform ${
                                         platformsOpen ? "rotate-180" : ""
                                     }`}
                                 />
@@ -319,11 +319,11 @@ export function Games() {
                                                         platform.id.toString()
                                                     )
                                                 }
-                                                className="mr-2 rounded text-heading focus:ring-heading"
+                                                className="mr-2 rounded text-heading dark:text-cyber-pink focus:ring-heading dark:focus:ring-cyber-pink"
                                             />
                                             <label
                                                 htmlFor={`platform-${platform.id}`}
-                                                className="text-textLight dark:text-textDark"
+                                                className="text-textLight dark:text-cyber-cyan"
                                             >
                                                 {platform.name} (
                                                 {platform.games_count || 0})
@@ -340,11 +340,11 @@ export function Games() {
                                 className="flex items-center justify-between cursor-pointer"
                                 onClick={() => setStoresOpen(!storesOpen)}
                             >
-                                <h3 className="font-medium text-heading dark:text-textDark mb-2">
+                                <h3 className="font-medium text-heading dark:text-cyber-cyan mb-2">
                                     Stores
                                 </h3>
                                 <ChevronDown
-                                    className={`h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform ${
+                                    className={`h-5 w-5 text-gray-600 dark:text-cyber-green transition-transform ${
                                         storesOpen ? "rotate-180" : ""
                                     }`}
                                 />
@@ -367,11 +367,11 @@ export function Games() {
                                                         store.id.toString()
                                                     )
                                                 }
-                                                className="mr-2 rounded text-heading focus:ring-heading"
+                                                className="mr-2 rounded text-heading dark:text-cyber-pink focus:ring-heading dark:focus:ring-cyber-pink"
                                             />
                                             <label
                                                 htmlFor={`store-${store.id}`}
-                                                className="text-textLight dark:text-textDark"
+                                                className="text-textLight dark:text-cyber-cyan"
                                             >
                                                 {store.name} (
                                                 {store.games_count || 0})
@@ -384,7 +384,7 @@ export function Games() {
 
                         <button
                             onClick={applyFilters}
-                            className="w-full bg-heading hover:bg-[#E00050] text-white py-2 rounded-lg transition-colors"
+                            className="w-full bg-heading hover:bg-[#E00050] dark:bg-cyber-pink dark:hover:bg-cyber-purple text-white py-2 rounded-lg transition-colors"
                         >
                             Apply Filters
                         </button>
@@ -398,7 +398,7 @@ export function Games() {
                             {[...Array(6)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"
+                                    className="h-64 bg-gray-200 dark:bg-cyber-black rounded-lg animate-pulse"
                                 ></div>
                             ))}
                         </div>
@@ -426,8 +426,8 @@ export function Games() {
                                                 className={`px-3 py-1 rounded-md ${
                                                     pagination.currentPage ===
                                                     page
-                                                        ? "bg-heading text-white"
-                                                        : "bg-gray-200 dark:bg-gray-700 text-textLight dark:text-textDark hover:bg-gray-300 dark:hover:bg-gray-600"
+                                                        ? "bg-heading dark:bg-cyber-pink text-white"
+                                                        : "bg-gray-200 dark:bg-cyber-black text-textLight dark:text-cyber-cyan hover:bg-gray-300 dark:hover:bg-cyber-purple"
                                                 }`}
                                             >
                                                 {page}
@@ -438,11 +438,11 @@ export function Games() {
                             )}
                         </>
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-header rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
-                            <p className="text-lg text-textLight dark:text-textDark">
+                        <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-cyber-dark rounded-lg shadow p-6 border border-gray-200 dark:border-cyber-purple">
+                            <p className="text-lg text-textLight dark:text-cyber-cyan">
                                 No games found matching your criteria.
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                            <p className="text-sm text-gray-500 dark:text-cyber-green mt-2">
                                 Try adjusting your filters or search query.
                             </p>
                         </div>

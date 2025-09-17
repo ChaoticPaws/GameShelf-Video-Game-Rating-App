@@ -224,4 +224,71 @@ class UserController extends Controller
 
         return response()->json($genreStats);
     }
+    public function updateHallOfFame(Request $request, $username)
+{
+    $requestedUser = User::where('name', $username)->firstOrFail();
+    
+    if ($request->user()->id !== $requestedUser->id) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    $validated = $request->validate([
+        'games' => 'required|array',
+        'games.*.id' => 'required|integer|exists:video_games,id',
+        'games.*.position' => 'required|integer|min:1|max:5'
+    ]);
+
+    $favoritesList = $requestedUser->favorites();
+
+    if (!$favoritesList) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User does not have a favorites list'
+        ], 404);
+    }
+
+    DB::table('list_games')
+        ->where('list_id', $favoritesList->id)
+        ->where('is_hof', true)
+        ->update(['is_hof' => false, 'position' => null]);
+
+    foreach ($request->games as $gameData) {
+        $exists = DB::table('list_games')
+            ->where('list_id', $favoritesList->id)
+            ->where('game_id', $gameData['id'])
+            ->exists();
+
+        if ($exists) {
+            DB::table('list_games')
+                ->where('list_id', $favoritesList->id)
+                ->where('game_id', $gameData['id'])
+                ->update([
+                    'is_hof' => true,
+                    'position' => $gameData['position']
+                ]);
+        }
+    }
+
+    $updatedFavorites = VideoGame::join('list_games', 'video_games.id', '=', 'list_games.game_id')
+        ->where('list_games.list_id', $favoritesList->id)
+        ->where('list_games.is_hof', true)
+        ->select('video_games.*', 'list_games.position', 'list_games.is_hof')
+        ->orderBy('list_games.position')
+        ->get();
+
+    $finalFavorites = array_fill(0, 5, null);
+    
+    foreach ($updatedFavorites as $game) {
+        $position = $game->position - 1; 
+        if ($position >= 0 && $position < 5) {
+            $finalFavorites[$position] = $game;
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Hall of Fame updated successfully',
+        'updatedFavorites' => $finalFavorites
+    ]);
+}
 }

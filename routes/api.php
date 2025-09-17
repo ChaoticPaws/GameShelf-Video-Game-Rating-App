@@ -19,6 +19,9 @@ Route::get('/search-games', [GameController::class, 'search']);
 Route::get('/games/{slug}', [GameController::class, 'getDetailsBySlug']);
 Route::get('/top-games', [GameController::class, 'getTopGames']);
 Route::get('/games/{slug}/reviews', [GameController::class, 'getReviewsBySlug']);
+Route::get('/games/{slug}/screenshots', [GameController::class, 'show']);
+
+
 
 //Rutas de usuario 
 
@@ -39,6 +42,8 @@ Route::get('/games/{slug}/reviews', [ReviewController::class, 'getReviewsBySlug'
 Route::post('/games/{slug}/reviews', [ReviewController::class, 'rate'])->middleware('auth:sanctum');
 Route::post('/reviews/{reviewId}/toggle-like', [ReviewController::class, 'toggleLike'])->middleware('auth:sanctum');
 Route::get('/reviews/recent', [ReviewController::class, 'getRecentReviews']);
+// Rutas de usuario Hall of Fame
+Route::middleware('auth:sanctum')->put('/users/{username}/hall-of-fame', [UserController::class, 'updateHallOfFame']);
 
 
 
